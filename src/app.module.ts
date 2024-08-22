@@ -25,6 +25,7 @@ import { HealthModule } from './health';
           },
           migrations: {
             directory: './migrations',
+            tableName: 'knex_migrations',
           },
           seeds: {
             directory: './seeds',
