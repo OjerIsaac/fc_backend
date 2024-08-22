@@ -1,5 +1,5 @@
 import { Controller, Get, Inject } from '@nestjs/common';
-import { HealthCheckService, HealthCheck } from '@nestjs/terminus';
+import { HealthCheckService, HealthCheck, HealthIndicatorResult } from '@nestjs/terminus';
 import { Knex } from 'knex';
 
 @Controller('health')
@@ -13,12 +13,22 @@ export class HealthController {
   @HealthCheck()
   async checkDatabase() {
     return this.health.check([
-      async () => {
+      async (): Promise<HealthIndicatorResult> => {
         try {
           await this.knex.raw('SELECT 1+1 AS result');
-          return { status: 'ok', info: 'Database connection is successful' };
+          return {
+            database: {
+              status: 'up',
+              message: 'Database connection is successful',
+            },
+          };
         } catch (error) {
-          return { status: 'error', message: `Database connection failed: ${error.message}` };
+          return {
+            database: {
+              status: 'down',
+              message: `Database connection failed: ${error.message}`,
+            },
+          };
         }
       },
     ]);
