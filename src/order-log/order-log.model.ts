@@ -12,19 +12,16 @@ export class OrderLog extends Model {
 
   status!: string;
 
-  timestamp!: string;
-
   // JSON schema for the model
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['orderId', 'status', 'timestamp'],
+      required: ['orderId', 'status'],
 
       properties: {
         id: { type: 'integer' },
         orderId: { type: 'integer' },
         status: { type: 'string' },
-        timestamp: { type: 'string', format: 'date-time' },
       },
     };
   }

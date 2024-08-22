@@ -4,6 +4,7 @@ import { ObjectionModule } from '@willsoto/nestjs-objection';
 import Knex from 'knex';
 import { envVarsSchema } from './libs/helpers';
 import { HealthModule } from './health';
+import { BrandModule } from './brand/brand.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { HealthModule } from './health';
       inject: [ConfigService],
     }),
     HealthModule,
+    BrandModule,
   ],
   providers: [
     {

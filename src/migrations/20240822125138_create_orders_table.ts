@@ -2,12 +2,15 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('orders', table => {
-    table.increments('id').primary();
+    table.uuid('id').primary().defaultTo(knex.raw('gen_random_uuid()'));
     table.integer('customerId').unsigned().notNullable();
-    table.integer('mealId').unsigned().notNullable();
-    table.integer('addonId').unsigned().nullable();
+    table.uuid('mealId').notNullable();
+    table.uuid('addonId').nullable();
     table.integer('quantity').notNullable();
     table.string('status').notNullable();
+    table.timestamp('createdAt').defaultTo(knex.fn.now());
+    table.timestamp('updatedAt').defaultTo(knex.fn.now());
+    table.timestamp('deletedAt').nullable();
 
     table.foreign('mealId').references('id').inTable('meals').onDelete('CASCADE');
     table.foreign('addonId').references('id').inTable('addons').onDelete('SET NULL');
