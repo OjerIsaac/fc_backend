@@ -6,13 +6,13 @@ export class Meal extends Model {
     return 'meals';
   }
 
-  id!: number;
+  id!: string;
 
   name!: string;
 
   price!: number;
 
-  brandId?: number;
+  brandId?: string;
 
   // JSON schema for the model
   static get jsonSchema() {
@@ -21,10 +21,10 @@ export class Meal extends Model {
       required: ['name', 'price'],
 
       properties: {
-        id: { type: 'integer' },
+        id: { type: 'string' },
         name: { type: 'string' },
         price: { type: 'number' },
-        brandId: { type: 'integer', nullable: true },
+        brandId: { type: 'string', nullable: true },
       },
     };
   }

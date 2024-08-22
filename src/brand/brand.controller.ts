@@ -1,7 +1,8 @@
 import { Controller, Post, Get, Put, Delete, Param, Body, Query, HttpStatus } from '@nestjs/common';
 import { BrandService } from './brand.service';
 import { CreateBrandDto, UpdateBrandDto } from './dto';
-import { HttpResponse } from '../libs/utils';
+import { HttpResponse, ErrorHelper } from '../libs/utils';
+import { validateUUID } from '../libs/helpers';
 
 @Controller('brands')
 export class BrandController {
@@ -20,33 +21,45 @@ export class BrandController {
 
   @Get(':id')
   async getBrandById(@Param('id') id: string) {
+    if (!validateUUID(id)) {
+      ErrorHelper.BadRequestException('Invalid ID');
+    }
+
     const data = await this.brandService.getBrandById(id);
 
     return HttpResponse.success({
       data,
       message: 'Brand fetched successfully',
-      statusCode: HttpStatus.CREATED,
+      statusCode: HttpStatus.OK,
     });
   }
 
   @Put(':id')
   async updateBrand(@Param('id') id: string, @Body() dto: UpdateBrandDto) {
+    if (!validateUUID(id)) {
+      ErrorHelper.BadRequestException('Invalid ID');
+    }
+
     const data = await this.brandService.updateBrand(id, dto);
 
     return HttpResponse.success({
       data,
       message: 'Brand updated successfully',
-      statusCode: HttpStatus.CREATED,
+      statusCode: HttpStatus.OK,
     });
   }
 
   @Delete(':id')
   async deleteBrand(@Param('id') id: string): Promise<void> {
+    if (!validateUUID(id)) {
+      ErrorHelper.BadRequestException('Invalid ID');
+    }
+
     await this.brandService.deleteBrand(id);
 
     return HttpResponse.success({
       message: 'Brand deleted successfully',
-      statusCode: HttpStatus.CREATED,
+      statusCode: HttpStatus.OK,
     });
   }
 
@@ -56,8 +69,8 @@ export class BrandController {
 
     return HttpResponse.success({
       data,
-      message: 'Brand added successfully',
-      statusCode: HttpStatus.CREATED,
+      message: 'Brand fetched successfully',
+      statusCode: HttpStatus.OK,
     });
   }
 }

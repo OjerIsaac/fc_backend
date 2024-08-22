@@ -5,7 +5,7 @@ export class Brand extends Model {
     return 'brands';
   }
 
-  id!: number;
+  id!: string;
 
   name!: string;
 
@@ -16,7 +16,7 @@ export class Brand extends Model {
       required: ['name'],
 
       properties: {
-        id: { type: 'integer' },
+        id: { type: 'string' },
         name: { type: 'string' },
       },
     };

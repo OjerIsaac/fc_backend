@@ -5,6 +5,7 @@ import Knex from 'knex';
 import { envVarsSchema } from './libs/helpers';
 import { HealthModule } from './health';
 import { BrandModule } from './brand/brand.module';
+import { MealModule } from './meal/meal.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { BrandModule } from './brand/brand.module';
     }),
     HealthModule,
     BrandModule,
+    MealModule,
   ],
   providers: [
     {
