@@ -6,6 +6,7 @@ import { envVarsSchema } from './libs/helpers';
 import { HealthModule } from './health';
 import { BrandModule } from './brand/brand.module';
 import { MealModule } from './meal/meal.module';
+import { AddonModule } from './addon/addon.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { MealModule } from './meal/meal.module';
     HealthModule,
     BrandModule,
     MealModule,
+    AddonModule,
   ],
   providers: [
     {
