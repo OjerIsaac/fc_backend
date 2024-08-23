@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.uuid('mealId').notNullable();
     table.uuid('addonId').nullable();
     table.integer('quantity').notNullable();
+    table.string('status').nullable();
     table.timestamp('createdAt').defaultTo(knex.fn.now());
     table.timestamp('updatedAt').defaultTo(knex.fn.now());
     table.timestamp('deletedAt').nullable();

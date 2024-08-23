@@ -15,6 +15,8 @@ export class Order extends Model {
 
   quantity!: number;
 
+  status?: string;
+
   // JSON schema for the model
   static get jsonSchema() {
     return {
@@ -27,6 +29,7 @@ export class Order extends Model {
         mealId: { type: 'string' },
         addonId: { type: 'string', nullable: true },
         quantity: { type: 'integer' },
+        status: { type: 'string', nullable: true },
       },
     };
   }

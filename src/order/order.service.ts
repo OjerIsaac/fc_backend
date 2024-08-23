@@ -3,6 +3,8 @@ import { Knex } from 'knex';
 import { Order } from './order.model';
 import { OrdersGateway } from '../app.gateway';
 import { CreateOrderDto, UpdateOrderDto } from './dto';
+import { OrderLog } from '../order-log/order-log.model';
+import { ErrorHelper } from '../libs/utils';
 
 @Injectable()
 export class OrderService {
@@ -102,5 +104,37 @@ export class OrderService {
           }
         : null, // If no addon is associated, return null
     }));
+  }
+
+  async processOrder(orderId: string): Promise<void> {
+    const order = await this.getOrderById(orderId);
+    if (!order) {
+      ErrorHelper.NotFoundException(`Order not found`);
+    }
+
+    if (order.status === 'completed' || order.status === 'cancelled') {
+      ErrorHelper.NotFoundException(`Order cannot be processed`);
+    }
+
+    const statusSequence = ['accepted', 'prepared', 'dispatched', 'delivered'];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const status of statusSequence) {
+      await Order.query().patchAndFetchById(orderId, { status });
+
+      await OrderLog.query().insert({ orderId, status, timestamp: new Date().toISOString() });
+
+      this.ordersGateway.broadcastOrderUpdate(orderId, status);
+    }
+
+    const totalPrice =
+      order.meal.price * order.quantity + (order.addon ? order.addon.price * order.quantity : 0);
+
+    await this.knex('calculated_orders').insert({
+      orderId,
+      totalPrice,
+      calculationDate: new Date().toISOString(),
+    });
+
+    this.ordersGateway.broadcastOrderUpdate(orderId, 'completed');
   }
 }
