@@ -11,10 +11,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { Order } from './order.model';
 import { HttpResponse, ErrorHelper } from '../libs/utils';
 import { validateUUID } from '../libs/helpers';
 import { AuthGuard, RoleGuard } from '../guards';
+import { CreateOrderDto, UpdateOrderDto } from './dto';
 
 @UseGuards(AuthGuard, RoleGuard)
 @Controller('orders')
@@ -22,8 +22,8 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  async createOrder(@Body() orderData: Partial<Order>) {
-    const data = await this.orderService.createOrder(orderData);
+  async createOrder(@Body() dto: CreateOrderDto) {
+    const data = await this.orderService.createOrder(dto);
 
     return HttpResponse.success({
       data,
@@ -48,12 +48,12 @@ export class OrderController {
   }
 
   @Put(':id')
-  async updateOrder(@Param('id') id: string, @Body() orderData: Partial<Order>) {
+  async updateOrder(@Param('id') id: string, @Body() dto: UpdateOrderDto) {
     if (!validateUUID(id)) {
       ErrorHelper.BadRequestException('Invalid ID');
     }
 
-    const data = await this.orderService.updateOrder(id, orderData);
+    const data = await this.orderService.updateOrder(id, dto);
 
     return HttpResponse.success({
       data,

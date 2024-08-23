@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
 import { Order } from './order.model';
 import { OrdersGateway } from '../app.gateway';
+import { CreateOrderDto, UpdateOrderDto } from './dto';
 
 @Injectable()
 export class OrderService {
@@ -10,8 +11,8 @@ export class OrderService {
     private readonly ordersGateway: OrdersGateway
   ) {}
 
-  async createOrder(orderData: Partial<Order>): Promise<Order> {
-    const order = await Order.query().insert(orderData);
+  async createOrder(dto: CreateOrderDto): Promise<Order> {
+    const order = await Order.query().insert(dto);
     this.ordersGateway.broadcastOrderUpdate(order.id, 'created');
     return order;
   }
@@ -55,8 +56,8 @@ export class OrderService {
     };
   }
 
-  async updateOrder(id: string, orderData: Partial<Order>): Promise<Order> {
-    const order = await Order.query().patchAndFetchById(id, orderData);
+  async updateOrder(id: string, dto: UpdateOrderDto): Promise<Order> {
+    const order = await Order.query().patchAndFetchById(id, dto);
     this.ordersGateway.broadcastOrderUpdate(id, 'updated');
     return order;
   }
