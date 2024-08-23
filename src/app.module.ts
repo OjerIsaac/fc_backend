@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ObjectionModule } from '@willsoto/nestjs-objection';
+import { JwtModule } from '@nestjs/jwt';
 import Knex from 'knex';
 import { envVarsSchema } from './libs/helpers';
 import { HealthModule } from './health';
@@ -50,6 +51,13 @@ import { OrderModule } from './order/order.module';
     MealModule,
     AddonModule,
     OrderModule,
+    {
+      ...JwtModule.register({
+        secret: process.env.JWT_SECRET,
+        signOptions: { expiresIn: '3h' },
+      }),
+      global: true,
+    },
   ],
   providers: [
     {

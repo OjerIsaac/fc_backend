@@ -1,9 +1,22 @@
-import { Controller, Post, Get, Put, Delete, Param, Body, Query, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  Query,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from './order.model';
 import { HttpResponse, ErrorHelper } from '../libs/utils';
 import { validateUUID } from '../libs/helpers';
+import { AuthGuard, RoleGuard } from '../guards';
 
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}

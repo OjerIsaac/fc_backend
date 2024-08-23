@@ -1,9 +1,22 @@
-import { Controller, Post, Get, Put, Delete, Param, Body, Query, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  Query,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { AddonService } from './addon.service';
 import { validateUUID } from '../libs/helpers';
 import { HttpResponse, ErrorHelper } from '../libs/utils';
 import { CreateAddonDto, UpdateAddonDto } from './dto';
+import { AuthGuard, RoleGuard } from '../guards';
 
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('addons')
 export class AddonController {
   constructor(private readonly addonService: AddonService) {}

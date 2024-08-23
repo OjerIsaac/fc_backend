@@ -1,9 +1,22 @@
-import { Controller, Post, Get, Put, Delete, Param, Body, Query, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  Query,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { BrandService } from './brand.service';
 import { CreateBrandDto, UpdateBrandDto } from './dto';
 import { HttpResponse, ErrorHelper } from '../libs/utils';
 import { validateUUID } from '../libs/helpers';
+import { AuthGuard, RoleGuard } from '../guards';
 
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('brands')
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}

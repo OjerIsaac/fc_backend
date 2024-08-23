@@ -1,9 +1,22 @@
-import { Controller, Post, Get, Put, Delete, Param, Body, Query, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Delete,
+  Param,
+  Body,
+  Query,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { MealService } from './meal.service';
 import { HttpResponse, ErrorHelper } from '../libs/utils';
 import { CreateMealDto, UpdateMealDto } from './dto';
 import { validateUUID } from '../libs/helpers';
+import { AuthGuard, RoleGuard } from '../guards';
 
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('meals')
 export class MealController {
   constructor(private readonly mealService: MealService) {}
