@@ -7,6 +7,7 @@ import { HealthModule } from './health';
 import { BrandModule } from './brand/brand.module';
 import { MealModule } from './meal/meal.module';
 import { AddonModule } from './addon/addon.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AddonModule } from './addon/addon.module';
     BrandModule,
     MealModule,
     AddonModule,
+    OrderModule,
   ],
   providers: [
     {
